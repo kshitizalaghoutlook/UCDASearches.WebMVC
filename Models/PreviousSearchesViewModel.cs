@@ -21,6 +21,12 @@ namespace UCDASearches.WebMVC.Models
         [Display(Name = "Request #")]
         public string? RequestId { get; set; }
 
+        public string? Uid { get; set; }
+
+        public string? Account { get; set; }
+
+        public string? Operator { get; set; }
+
         public string? Vin { get; set; }
 
         [DataType(DataType.Date)]

@@ -42,6 +42,21 @@ namespace UCDASearches.WebMVC.Controllers
                 sql += " AND VIN = @Vin";
                 command.Parameters.AddWithValue("@Vin", model.Vin);
             }
+            if (!string.IsNullOrWhiteSpace(model.Uid))
+            {
+                sql += " AND UID = @Uid";
+                command.Parameters.AddWithValue("@Uid", model.Uid);
+            }
+            if (!string.IsNullOrWhiteSpace(model.Account))
+            {
+                sql += " AND Account = @Account";
+                command.Parameters.AddWithValue("@Account", model.Account);
+            }
+            if (!string.IsNullOrWhiteSpace(model.Operator))
+            {
+                sql += " AND Operator = @Operator";
+                command.Parameters.AddWithValue("@Operator", model.Operator);
+            }
             if (model.FromDate.HasValue)
             {
                 sql += " AND Time_Stamp >= @FromDate";
