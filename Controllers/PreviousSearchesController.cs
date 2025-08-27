@@ -29,7 +29,7 @@ namespace UCDASearches.WebMVC.Controllers
 
             var sql = @"SELECT RequestID, UID, VIN, Time_Stamp, Account, Operator, AutoCheck, Lien, History, OOPS
                      FROM Requests WHERE 1 = 1";
-            var command = new SqlCommand();
+            await using var command = new SqlCommand();
             command.Connection = connection;
 
             if (!string.IsNullOrWhiteSpace(model.RequestId))
