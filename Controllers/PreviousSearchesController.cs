@@ -27,9 +27,9 @@ namespace UCDASearches.WebMVC.Controllers
             using var connection = new SqlConnection(connectionString);
             await connection.OpenAsync();
 
-            var sql = @"SELECT RequestID, UID, VIN, Time_Stamp, Account, Operator, AutoCheck, Lien, History, OOPS
+            var sql = @"SELECT RequestID, UID, VIN, Time_Stamp, Account, Operator, AutoCheck, Lien, History, OOPS, ExcaDate, EXCA, IRE, Carfax, CPIC, CPICdate, CAMVAP, LNOpath, LNOcompleted
                      FROM Requests WHERE 1 = 1";
-            var command = new SqlCommand();
+            await using var command = new SqlCommand();
             command.Connection = connection;
 
             if (int.TryParse(model.RequestId, out var requestId))
@@ -40,22 +40,22 @@ namespace UCDASearches.WebMVC.Controllers
             if (!string.IsNullOrWhiteSpace(model.Vin))
             {
                 sql += " AND VIN = @Vin";
-                command.Parameters.AddWithValue("@Vin", model.Vin);
+                command.Parameters.Add("@Vin", System.Data.SqlDbType.VarChar, 17).Value = model.Vin;
             }
             if (model.FromDate.HasValue)
             {
                 sql += " AND Time_Stamp >= @FromDate";
-                command.Parameters.AddWithValue("@FromDate", model.FromDate.Value);
+                command.Parameters.Add("@FromDate", System.Data.SqlDbType.DateTime).Value = model.FromDate.Value;
             }
             if (model.ToDate.HasValue)
             {
                 sql += " AND Time_Stamp <= @ToDate";
-                command.Parameters.AddWithValue("@ToDate", model.ToDate.Value);
+                command.Parameters.Add("@ToDate", System.Data.SqlDbType.DateTime).Value = model.ToDate.Value;
             }
 
             command.CommandText = sql;
 
-            using var reader = await command.ExecuteReaderAsync();
+            await using var reader = await command.ExecuteReaderAsync();
             while (await reader.ReadAsync())
             {
                 results.Add(new PreviousSearch
@@ -69,7 +69,16 @@ namespace UCDASearches.WebMVC.Controllers
                     AutoCheck = reader[6] == DBNull.Value ? string.Empty : Convert.ToString(reader[6])!,
                     Lien = reader[7] == DBNull.Value ? string.Empty : Convert.ToString(reader[7])!,
                     History = reader[8] == DBNull.Value ? string.Empty : Convert.ToString(reader[8])!,
-                    OOPS = reader[9] == DBNull.Value ? string.Empty : Convert.ToString(reader[9])!
+                    OOPS = reader[9] == DBNull.Value ? string.Empty : Convert.ToString(reader[9])!,
+                    ExcaDate = reader.IsDBNull(10) ? (DateTime?)null : reader.GetDateTime(10),
+                    EXCA = reader[11] == DBNull.Value ? string.Empty : Convert.ToString(reader[11])!,
+                    IRE = reader[12] == DBNull.Value ? string.Empty : Convert.ToString(reader[12])!,
+                    Carfax = reader[13] == DBNull.Value ? string.Empty : Convert.ToString(reader[13])!,
+                    CPIC = reader[14] == DBNull.Value ? string.Empty : Convert.ToString(reader[14])!,
+                    CPICdate = reader.IsDBNull(15) ? (DateTime?)null : reader.GetDateTime(15),
+                    CAMVAP = reader[16] == DBNull.Value ? string.Empty : Convert.ToString(reader[16])!,
+                    LNOpath = reader[17] == DBNull.Value ? string.Empty : Convert.ToString(reader[17])!,
+                    LNOcompleted = reader.IsDBNull(18) ? (DateTime?)null : reader.GetDateTime(18)
                 });
             }
 

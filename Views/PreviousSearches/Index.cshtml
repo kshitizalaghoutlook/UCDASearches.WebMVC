@@ -40,6 +40,15 @@
                 <th>Lien</th>
                 <th>History</th>
                 <th>OOPS</th>
+                <th>Exca Date</th>
+                <th>EXCA</th>
+                <th>IRE</th>
+                <th>Carfax</th>
+                <th>CPIC</th>
+                <th>CPIC Date</th>
+                <th>CAMVAP</th>
+                <th>LNO Path</th>
+                <th>LNO Completed</th>
             </tr>
         </thead>
         <tbody>
@@ -56,6 +65,15 @@
                 <td>@item.Lien</td>
                 <td>@item.History</td>
                 <td>@item.OOPS</td>
+                <td>@item.ExcaDate?.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                <td>@item.EXCA</td>
+                <td>@item.IRE</td>
+                <td>@item.Carfax</td>
+                <td>@item.CPIC</td>
+                <td>@item.CPICdate?.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                <td>@item.CAMVAP</td>
+                <td>@item.LNOpath</td>
+                <td>@item.LNOcompleted?.ToString("yyyy-MM-dd HH:mm:ss")</td>
             </tr>
         }
         </tbody>
