@@ -6,6 +6,7 @@ namespace UCDASearches.WebMVC.Models
     {
         public int RequestID { get; set; }
         public string UID { get; set; } = string.Empty;
+        [StringLength(17, MinimumLength = 17)]
         public string Vin { get; set; } = string.Empty;
         public DateTime TimeStamp { get; set; }
         public string Account { get; set; } = string.Empty;
@@ -21,6 +22,7 @@ namespace UCDASearches.WebMVC.Models
         [Display(Name = "Request #")]
         public string? RequestId { get; set; }
 
+        [StringLength(17, MinimumLength = 17)]
         public string? Vin { get; set; }
 
         [DataType(DataType.Date)]

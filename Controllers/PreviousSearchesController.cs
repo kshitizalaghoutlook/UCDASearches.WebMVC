@@ -17,8 +17,13 @@ namespace UCDASearches.WebMVC.Controllers
         [HttpGet]
         public async Task<IActionResult> Index(PreviousSearchesViewModel model)
         {
-            // Only query when a search is performed
-            if (Request.Query.Count == 0)
+            if (model.FromDate.HasValue && model.ToDate.HasValue && model.FromDate > model.ToDate)
+            {
+                ModelState.AddModelError(string.Empty, "From date must be earlier than or equal to To date.");
+            }
+
+            // Only query when a search is performed or when the model is valid
+            if (!ModelState.IsValid || Request.Query.Count == 0)
                 return View(model);
 
             var results = new List<PreviousSearch>();
