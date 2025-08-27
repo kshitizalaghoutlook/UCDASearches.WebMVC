@@ -23,7 +23,7 @@ namespace UCDASearches.WebMVC.Controllers
             if (model.Email == "test@test.com" && model.Password == "123456")
             {
                 // return LocalRedirect(returnUrl ?? Url.Action("Index","Home")!);
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "Search");
             }
 
             ModelState.AddModelError(string.Empty, "Invalid credentials");

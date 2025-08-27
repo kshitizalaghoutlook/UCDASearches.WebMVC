@@ -1,0 +1,34 @@
+@model SearchViewModel
+@{
+    ViewData["Title"] = "Search";
+}
+<form asp-action="Index" method="post">
+    <table class="table table-striped align-middle">
+        <thead class="table-primary">
+            <tr>
+                <th>VIN</th>
+                <th>Ontario Lien<br/><small>$11.50</small></th>
+                <th>Auto Check<br/><small>$8.00</small></th>
+                <th>Ontario History<br/><small>$16.00</small></th>
+                <th>OOP</th>
+                <th>Carfax<br/><small>$64.95</small></th>
+                <th>Export Check<br/><small>$19.95</small></th>
+            </tr>
+        </thead>
+        <tbody>
+        @for (var i = 0; i < Model.Items.Count; i++)
+        {
+            <tr>
+                <td><input class="form-control" asp-for="Items[i].Vin" /></td>
+                <td class="text-center"><input type="checkbox" asp-for="Items[i].OntarioLien" /></td>
+                <td class="text-center"><input type="checkbox" asp-for="Items[i].AutoCheck" /></td>
+                <td class="text-center"><input type="checkbox" asp-for="Items[i].OntarioHistory" /></td>
+                <td class="text-center"><input type="checkbox" asp-for="Items[i].Oop" /></td>
+                <td class="text-center"><input type="checkbox" asp-for="Items[i].Carfax" /></td>
+                <td class="text-center"><input type="checkbox" asp-for="Items[i].ExportCheck" /></td>
+            </tr>
+        }
+        </tbody>
+    </table>
+    <button class="btn btn-primary">Submit</button>
+</form>
