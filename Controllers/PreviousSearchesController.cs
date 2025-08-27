@@ -1,3 +1,4 @@
+using System.Data;
 using System.Data.SqlClient;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -35,22 +36,22 @@ namespace UCDASearches.WebMVC.Controllers
             if (!string.IsNullOrWhiteSpace(model.RequestId))
             {
                 sql += " AND RequestID = @RequestID";
-                command.Parameters.AddWithValue("@RequestID", model.RequestId);
+                command.Parameters.Add("@RequestID", SqlDbType.Int).Value = int.Parse(model.RequestId);
             }
             if (!string.IsNullOrWhiteSpace(model.Vin))
             {
                 sql += " AND VIN = @Vin";
-                command.Parameters.AddWithValue("@Vin", model.Vin);
+                command.Parameters.Add("@Vin", SqlDbType.VarChar, 17).Value = model.Vin;
             }
             if (model.FromDate.HasValue)
             {
                 sql += " AND Time_Stamp >= @FromDate";
-                command.Parameters.AddWithValue("@FromDate", model.FromDate.Value);
+                command.Parameters.Add("@FromDate", SqlDbType.DateTime).Value = model.FromDate.Value;
             }
             if (model.ToDate.HasValue)
             {
                 sql += " AND Time_Stamp <= @ToDate";
-                command.Parameters.AddWithValue("@ToDate", model.ToDate.Value);
+                command.Parameters.Add("@ToDate", SqlDbType.DateTime).Value = model.ToDate.Value;
             }
 
             command.CommandText = sql;
