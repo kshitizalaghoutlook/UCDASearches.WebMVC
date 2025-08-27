@@ -4,10 +4,18 @@ using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
+using UCDASearches.WebMVC.Services;
 namespace UCDASearches.WebMVC.Controllers
 {
     public class AccountController : Controller
     {
+        private readonly IUserService _userService;
+
+        public AccountController(IUserService userService)
+        {
+            _userService = userService;
+        }
+
         [HttpGet]
         public IActionResult Login(string? returnUrl = null)
         {
@@ -22,8 +30,7 @@ namespace UCDASearches.WebMVC.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            // TODO: replace with real auth (Identity or your DB)
-            if (model.Email == "test@test.com" && model.Password == "123456")
+            if (await _userService.ValidateCredentialsAsync(model.Email, model.Password))
             {
                 var claims = new List<Claim>
                 {
@@ -35,9 +42,9 @@ namespace UCDASearches.WebMVC.Controllers
 
                 await HttpContext.SignInAsync(
                     CookieAuthenticationDefaults.AuthenticationScheme,
-                    principal);
+                    principal,
+                    new AuthenticationProperties { IsPersistent = model.RememberMe });
 
-                // return LocalRedirect(returnUrl ?? Url.Action("Index","Home")!);
                 return RedirectToAction("Index", "Search");
             }
 
