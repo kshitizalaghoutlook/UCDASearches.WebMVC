@@ -20,10 +20,10 @@ namespace UCDASearches.WebMVC.Models
         public string IRE { get; set; } = string.Empty;
         public string Carfax { get; set; } = string.Empty;
         public string CPIC { get; set; } = string.Empty;
-        public DateTime? CPICdate { get; set; }
+        public DateTime? CPICTime { get; set; }
         public string CAMVAP { get; set; } = string.Empty;
-        public string LNOpath { get; set; } = string.Empty;
-        public DateTime? LNOcompleted { get; set; }
+        public string LNONpath { get; set; } = string.Empty;
+        public DateTime? LNONcompleted { get; set; }
 
     }
 

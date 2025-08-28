@@ -7,7 +7,7 @@ namespace UCDASearches.WebMVC.Controllers
     [Authorize]
     public class SearchController : Controller
     {
-        [HttpGet]
+        [HttpGet("/search")]
         public IActionResult Index() => View(new SearchViewModel());
 
         [HttpPost]
