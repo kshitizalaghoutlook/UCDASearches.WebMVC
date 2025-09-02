@@ -51,6 +51,13 @@ namespace UCDASearches.WebMVC.Controllers
             ModelState.AddModelError(string.Empty, "Invalid credentials");
             return View(model);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            return RedirectToAction("Login", "Account");
+        }
     }
 
     public class LoginViewModel
