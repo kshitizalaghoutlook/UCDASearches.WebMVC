@@ -31,24 +31,11 @@ namespace UCDASearches.WebMVC.Models
     {
         [Display(Name = "Request #")]
         public string? RequestId { get; set; }
-
-
-        public string? Uid { get; set; }
-
-        public string? Account { get; set; }
-
-        public string? Operator { get; set; }
-
-
         public string? Vin { get; set; }
 
         [DataType(DataType.Date)]
-        [Display(Name = "From")]
-        public DateTime? FromDate { get; set; }
-
-        [DataType(DataType.Date)]
-        [Display(Name = "To")]
-        public DateTime? ToDate { get; set; }
+        [Display(Name = "Date")]
+        public DateTime? Date { get; set; }
 
         public List<PreviousSearch> Results { get; set; } = new();
     }
