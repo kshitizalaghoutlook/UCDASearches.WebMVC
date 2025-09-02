@@ -1,0 +1,86 @@
+@model PreviousSearchesViewModel
+@{
+    ViewData["Title"] = "Previous Searches";
+}
+
+<form method="get" class="row g-3 mb-4">
+    <div class="col-md-2">
+        <label asp-for="RequestId" class="form-label"></label>
+        <input asp-for="RequestId" class="form-control" />
+    </div>
+
+    <div class="col-md-4">
+        <label asp-for="Vin" class="form-label"></label>
+        <input asp-for="Vin" class="form-control" />
+    </div>
+    <div class="col-md-2">
+        <label asp-for="Date" class="form-label"></label>
+        <input asp-for="Date" class="form-control" />
+    </div>
+    <div class="col-md-2 align-self-end">
+        <button class="btn btn-primary w-100">Find</button>
+    </div>
+</form>
+
+@if (Model.Results.Any())
+{
+    <table class="table table-striped align-middle">
+        <thead class="table-primary">
+            <tr>
+                <th>Request #</th>
+                <th>UID</th>
+                <th>VIN</th>
+                <th>Time Stamp</th>
+                <th>Account</th>
+                <th>Operator</th>
+                <th>AutoCheck</th>
+                <th>Lien</th>
+                <th>History</th>
+                <th>OOPS</th>
+
+                <th>Exca Date</th>
+                <th>EXCA</th>
+                <th>IRE</th>
+                <th>Carfax</th>
+                <th>CPIC</th>
+                <th>CPIC Time</th>
+                <th>CAMVAP</th>
+                <th>LNON Path</th>
+                <th>LNON Completed</th>
+
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.Results)
+        {
+            <tr>
+                <td>@item.RequestID</td>
+                <td>@item.UID</td>
+                <td>@item.Vin</td>
+                <td>@item.TimeStamp?.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                <td>@item.Account</td>
+                <td>@item.Operator</td>
+                <td>@item.AutoCheck</td>
+                <td>@item.Lien</td>
+                <td>@item.History</td>
+                <td>@item.OOPS</td>
+
+                <td>@item.ExcaDate?.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                <td>@item.EXCA</td>
+                <td>@item.IRE</td>
+                <td>@item.Carfax</td>
+                <td>@item.CPIC</td>
+                <td>@item.CPICTime?.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                <td>@item.CAMVAP</td>
+                <td>@item.LNONpath</td>
+                <td>@item.LNONcompleted?.ToString("yyyy-MM-dd HH:mm:ss")</td>
+
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else if (Context.Request.Query.Any())
+{
+    <div class="alert alert-info">No results found.</div>
+}

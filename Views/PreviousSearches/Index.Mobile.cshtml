@@ -1,0 +1,33 @@
+@model PreviousSearchesViewModel
+@{
+    ViewData["Title"] = "Previous Searches";
+}
+
+@if (Model.Results.Any())
+{
+    <table class="table table-striped align-middle">
+        <thead class="table-primary">
+            <tr>
+                <th>Time</th>
+                <th>VIN</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.Results)
+        {
+            <tr>
+                <td>@item.TimeStamp?.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                <td>@item.Vin</td>
+                <td>
+                    <a asp-action="Index" asp-route-RequestId="@item.RequestID" class="btn btn-primary btn-sm">View</a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info">No results found.</div>
+}
