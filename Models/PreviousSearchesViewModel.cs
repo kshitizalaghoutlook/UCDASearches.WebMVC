@@ -30,20 +30,8 @@ namespace UCDASearches.WebMVC.Models
 
     public class PreviousSearchesViewModel
     {
-        [Display(Name = "Request #")]
-        public string? RequestId { get; set; }
-<<<<<<< HEAD
-
-
-        public int? Uid { get; set; }
-
-        public string? Account { get; set; }
-
-        public string? Operator { get; set; }
-
-
-=======
->>>>>>> 01191a00804d66c3d5eda77a5bb8e61fa85602a0
+        //[Display(Name = "Request #")]
+        //public string? RequestId { get; set; }
         public string? Vin { get; set; }
 
         [DataType(DataType.Date)]

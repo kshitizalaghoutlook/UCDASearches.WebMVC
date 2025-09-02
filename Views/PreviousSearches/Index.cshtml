@@ -4,10 +4,10 @@
 }
 
 <form method="get" class="row g-3 mb-4">
-    <div class="col-md-2">
+   @*  <div class="col-md-2">
         <label asp-for="RequestId" class="form-label"></label>
         <input asp-for="RequestId" class="form-control" />
-    </div>
+    </div> *@
 
     <div class="col-md-4">
         <label asp-for="Vin" class="form-label"></label>
@@ -43,40 +43,40 @@
                 <th>IRE</th>
                 <th>Carfax</th>
                 <th>CPIC</th>
-                <th>CPIC Time</th>
+                <th>CPIC Date</th>
                 <th>CAMVAP</th>
-                <th>LNON Path</th>
-                <th>LNON Completed</th>
+                <th>LNO Path</th>
+                <th>LNO Completed</th>
 
             </tr>
         </thead>
         <tbody>
-        @foreach (var item in Model.Results)
-        {
-            <tr>
-                <td>@item.RequestID</td>
-                <td>@item.UID</td>
-                <td>@item.Vin</td>
-                <td>@item.TimeStamp?.ToString("yyyy-MM-dd HH:mm:ss")</td>
-                <td>@item.Account</td>
-                <td>@item.Operator</td>
-                <td>@item.AutoCheck</td>
-                <td>@item.Lien</td>
-                <td>@item.History</td>
-                <td>@item.OOPS</td>
+            @foreach (var item in Model.Results)
+            {
+                <tr>
+                    <td>@item.RequestID</td>
+                    <td>@item.UID</td>
+                    <td>@item.Vin</td>
+                    <td>@item.TimeStamp?.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                    <td>@item.Account</td>
+                    <td>@item.Operator</td>
+                    <td>@item.AutoCheck</td>
+                    <td>@item.Lien</td>
+                    <td>@item.History</td>
+                    <td>@item.OOPS</td>
 
-                <td>@item.ExcaDate?.ToString("yyyy-MM-dd HH:mm:ss")</td>
-                <td>@item.EXCA</td>
-                <td>@item.IRE</td>
-                <td>@item.Carfax</td>
-                <td>@item.CPIC</td>
-                <td>@item.CPICTime?.ToString("yyyy-MM-dd HH:mm:ss")</td>
-                <td>@item.CAMVAP</td>
-                <td>@item.LNONpath</td>
-                <td>@item.LNONcompleted?.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                    <td>@item.ExcaDate?.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                    <td>@item.EXCA</td>
+                    <td>@item.IRE</td>
+                    <td>@item.Carfax</td>
+                    <td>@item.CPIC</td>
+                    <td>@item.CPICTime?.ToString("yyyy-MM-dd HH:mm:ss")</td>
+                    <td>@item.CAMVAP</td>
+                    <td>@item.LNONpath</td>
+                    <td>@item.LNONcompleted?.ToString("yyyy-MM-dd HH:mm:ss")</td>
 
-            </tr>
-        }
+                </tr>
+            }
         </tbody>
     </table>
 }
