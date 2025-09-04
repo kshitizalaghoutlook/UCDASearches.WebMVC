@@ -29,8 +29,6 @@ namespace UCDASearches.WebMVC.Models
 
     public class PreviousSearchesViewModel
     {
-        [Display(Name = "Request #")]
-        public string? RequestId { get; set; }
         public string? Vin { get; set; }
 
         [DataType(DataType.Date)]
