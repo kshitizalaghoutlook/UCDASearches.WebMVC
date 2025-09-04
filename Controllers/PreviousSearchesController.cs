@@ -28,8 +28,7 @@ public class PreviousSearchesController : Controller
         await using var connection = new SqlConnection(connectionString);
         await connection.OpenAsync();
 
-        bool hasFilters = !string.IsNullOrWhiteSpace(model.RequestId)
-                          || !string.IsNullOrWhiteSpace(model.Vin)
+        bool hasFilters = !string.IsNullOrWhiteSpace(model.Vin)
                           || model.Date.HasValue;
 
         var sb = new StringBuilder();
@@ -42,12 +41,6 @@ public class PreviousSearchesController : Controller
         await using var command = new SqlCommand();
         command.Connection = connection;
         command.Parameters.Add("@Account", SqlDbType.VarChar, 20).Value = DefaultAccount;
-
-        if (!string.IsNullOrWhiteSpace(model.RequestId))
-        {
-            sb.Append(" AND RequestID = @RequestID");
-            command.Parameters.Add("@RequestID", SqlDbType.Int).Value = int.Parse(model.RequestId);
-        }
 
         if (!string.IsNullOrWhiteSpace(model.Vin))
         {
