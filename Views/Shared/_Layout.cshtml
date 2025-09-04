@@ -21,35 +21,23 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 main-menu">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Search" asp-action="Index">New Search</a>
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Search" asp-action="Index">Search</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="PreviousSearches" asp-action="Index">Previous Searches</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Daily View</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Drive Clean&#8482;</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Transit</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">FAQ</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Test Support</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Jan Registration</a>
                         </li>
                     </ul>
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Account" asp-action="Logout">Log out</a>
+                        </li>
+                        <li class="nav-item ms-lg-3">
+                            <a class="btn btn-primary" asp-area="" asp-controller="Search" asp-action="Index">New Search</a>
                         </li>
                     </ul>
                 </div>
