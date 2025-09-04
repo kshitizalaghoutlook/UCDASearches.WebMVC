@@ -67,10 +67,3 @@ button.accept-policy {
 .navbar .btn {
   padding: 0.4rem 1rem;
 }
-
-/* separators between top menu items */
-.main-menu .nav-item + .nav-item::before {
-  content: "|";
-  padding: 0 0.5rem;
-  color: inherit;
-}
