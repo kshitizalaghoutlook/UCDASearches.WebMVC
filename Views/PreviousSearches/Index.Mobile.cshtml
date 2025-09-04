@@ -10,7 +10,6 @@
             <tr>
                 <th>Time</th>
                 <th>VIN</th>
-                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -19,9 +18,6 @@
             <tr>
                 <td>@item.TimeStamp.ToString("yyyy-MM-dd HH:mm:ss")</td>
                 <td>@item.Vin</td>
-                <td>
-                    <a asp-action="Index" asp-route-RequestId="@item.RequestID" class="btn btn-primary btn-sm">View</a>
-                </td>
             </tr>
         }
         </tbody>
