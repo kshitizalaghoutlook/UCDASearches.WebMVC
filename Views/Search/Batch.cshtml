@@ -5,28 +5,63 @@
 <div class="row">
     <div class="col-md-6">
         <form asp-action="Batch" method="post">
+            <!-- Legacy: SearchType dropdown (optional, kept for back-compat) -->
             <div class="mb-3">
                 <label asp-for="SearchType" class="form-label">Search Type</label>
                 <select asp-for="SearchType" class="form-select" asp-items="Model.SearchTypes" id="searchType"></select>
             </div>
+
+            <!-- Province (only needed for Lien searches, toggled via script) -->
             <div class="mb-3" id="provinceContainer">
                 <label asp-for="Province" class="form-label">Province</label>
                 <select asp-for="Province" class="form-select" asp-items="Model.Provinces"></select>
             </div>
+
             <div class="mb-3">
                 <label asp-for="VinBatch" class="form-label">VINs (one per line, up to 100)</label>
                 <textarea asp-for="VinBatch" class="form-control" rows="15"></textarea>
             </div>
+
+            <!-- Current behavior: checkbox flags -->
+            <div class="mb-3">
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="OntarioLien" id="OntarioLien" />
+                    <label class="form-check-label" asp-for="OntarioLien">Ontario Lien</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="AutoCheck" />
+                    <label class="form-check-label" asp-for="AutoCheck">Auto Check</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="OntarioHistory" />
+                    <label class="form-check-label" asp-for="OntarioHistory">Ontario History</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="Oop" />
+                    <label class="form-check-label" asp-for="Oop">OOP</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="Carfax" />
+                    <label class="form-check-label" asp-for="Carfax">Carfax</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="ExportCheck" />
+                    <label class="form-check-label" asp-for="ExportCheck">Export Check</label>
+                </div>
+            </div>
+
             <button class="btn btn-primary">Submit</button>
-            <button type="reset" class="btn btn-secondary ms-2">Clear</button>
+            <button type="reset" class="btn btn-secondary ms-2" id="formReset">Clear</button>
         </form>
     </div>
+
     <div class="col-md-6">
         <div class="d-flex justify-content-end mb-2">
             <form asp-action="ClearBatch" method="post">
-                <button class="btn btn-secondary">Clear</button>
+                <button class="btn btn-secondary">Clear Batch</button>
             </form>
         </div>
+
         <div class="border p-3" style="min-height:400px;">
             @if (Model.Items.Count > 0)
             {
@@ -39,6 +74,8 @@
                             <th>Auto Check</th>
                             <th>Ontario History</th>
                             <th>OOP</th>
+                            <th>Carfax</th>
+                            <th>Export Check</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -51,6 +88,8 @@
                                 <td>@(item.AutoCheck ? "✔" : "")</td>
                                 <td>@(item.OntarioHistory ? "✔" : "")</td>
                                 <td>@(item.Oop ? "✔" : "")</td>
+                                <td>@(item.Carfax ? "✔" : "")</td>
+                                <td>@(item.ExportCheck ? "✔" : "")</td>
                             </tr>
                         }
                     </tbody>
@@ -66,16 +105,25 @@
 
 @section Scripts {
 <script>
-    const searchType = document.getElementById('searchType');
-    const provinceContainer = document.getElementById('provinceContainer');
-    function toggleProvince() {
-        if (searchType.value === 'Lien') {
-            provinceContainer.style.display = 'block';
-        } else {
-            provinceContainer.style.display = 'none';
+    (function () {
+        const searchType = document.getElementById('searchType');
+        const provinceContainer = document.getElementById('provinceContainer');
+        const ontarioLien = document.getElementById('OntarioLien');
+        const formReset = document.getElementById('formReset');
+
+        function toggleProvince() {
+            // Show Province if legacy SearchType == Lien OR Ontario Lien checkbox is checked
+            const needProvince =
+                (searchType && searchType.value === 'Lien') ||
+                (ontarioLien && ontarioLien.checked);
+
+            provinceContainer.style.display = needProvince ? 'block' : 'none';
         }
-    }
-    searchType.addEventListener('change', toggleProvince);
-    toggleProvince();
+
+        if (searchType) searchType.addEventListener('change', toggleProvince);
+        if (ontarioLien) ontarioLien.addEventListener('change', toggleProvince);
+        if (formReset) formReset.addEventListener('click', () => setTimeout(toggleProvince, 0));
+        toggleProvince();
+    })();
 </script>
 }
