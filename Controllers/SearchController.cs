@@ -40,6 +40,12 @@ namespace UCDASearches.WebMVC.Controllers
                 .Take(100)
                 ?? Enumerable.Empty<string>();
 
+            // Province is only relevant for lien searches; ignore it for AutoCheck or Ontario History
+            var needProvince = model.OntarioLien || model.SearchType == "Lien";
+            var incomingProvince = needProvince && !string.IsNullOrWhiteSpace(model.Province)
+                ? model.Province.Trim()
+                : null;
+
             foreach (var vin in vins)
             {
                 var existing = _batchItems.FirstOrDefault(i =>
@@ -47,35 +53,32 @@ namespace UCDASearches.WebMVC.Controllers
 
                 if (existing == null)
                 {
-                    // New VIN: carry over Province if provided
+                    // New VIN: only carry Province if it is relevant
                     existing = new SearchItem
                     {
                         Vin = vin,
-                        Province = string.IsNullOrWhiteSpace(model.Province) ? null : model.Province.Trim()
+                        Province = incomingProvince
                     };
                     _batchItems.Add(existing);
                 }
-                else
+                else if (incomingProvince != null)
                 {
                     // Existing VIN: append-unique Province (CSV), null/empty safe
-                    if (!string.IsNullOrWhiteSpace(model.Province))
-                    {
-                        var provinces = (existing.Province ?? string.Empty)
-                            .Split(',', System.StringSplitOptions.RemoveEmptyEntries)
-                            .Select(p => p.Trim())
-                            .ToList();
+                    var provinces = (existing.Province ?? string.Empty)
+                        .Split(',', System.StringSplitOptions.RemoveEmptyEntries)
+                        .Select(p => p.Trim())
+                        .ToList();
 
-                        var incoming = model.Province.Trim();
-                        if (!provinces.Contains(incoming, System.StringComparer.OrdinalIgnoreCase))
-                        {
-                            provinces.Add(incoming);
-                            existing.Province = string.Join(", ", provinces);
-                        }
-                        else if (string.IsNullOrWhiteSpace(existing.Province))
-                        {
-                            // If existing was empty, just set it
-                            existing.Province = incoming;
-                        }
+                    var incoming = incomingProvince;
+                    if (!provinces.Contains(incoming, System.StringComparer.OrdinalIgnoreCase))
+                    {
+                        provinces.Add(incoming);
+                        existing.Province = string.Join(", ", provinces);
+                    }
+                    else if (string.IsNullOrWhiteSpace(existing.Province))
+                    {
+                        // If existing was empty, just set it
+                        existing.Province = incoming;
                     }
                 }
 
@@ -104,7 +107,7 @@ namespace UCDASearches.WebMVC.Controllers
 
             // Reset textarea for convenience; keep Province to speed batching
             model.VinBatch = string.Empty;
-            // model.Province = string.Empty; // enable if you prefer to clear Province too
+            if (!needProvince) model.Province = string.Empty;
 
             model.Items = _batchItems;
             return View(model);
