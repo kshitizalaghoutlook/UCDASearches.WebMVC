@@ -36,53 +36,86 @@ namespace UCDASearches.WebMVC.Controllers
         {
             var vins = model.VinBatch?.Split('\n', '\r')
                 .Select(v => v.Trim())
-                .Where(v => !string.IsNullOrEmpty(v))
+                .Where(v => !string.IsNullOrWhiteSpace(v))
                 .Take(100)
                 ?? Enumerable.Empty<string>();
 
             foreach (var vin in vins)
             {
-                var existing = _batchItems.FirstOrDefault(i => i.Vin.Equals(vin, System.StringComparison.OrdinalIgnoreCase));
+                var existing = _batchItems.FirstOrDefault(i =>
+                    i.Vin.Equals(vin, System.StringComparison.OrdinalIgnoreCase));
+
                 if (existing == null)
                 {
-                    existing = new SearchItem { Vin = vin, Province = model.Province };
+                    // New VIN: carry over Province if provided
+                    existing = new SearchItem
+                    {
+                        Vin = vin,
+                        Province = string.IsNullOrWhiteSpace(model.Province) ? null : model.Province.Trim()
+                    };
                     _batchItems.Add(existing);
                 }
                 else
                 {
-// Province: append unique province values (CSV), but be null/empty safe
-if (!string.IsNullOrWhiteSpace(model.Province))
-{
-    var provinces = (existing.Province ?? string.Empty)
-        .Split(',', System.StringSplitOptions.RemoveEmptyEntries)
-        .Select(p => p.Trim())
-        .ToList();
+                    // Existing VIN: append-unique Province (CSV), null/empty safe
+                    if (!string.IsNullOrWhiteSpace(model.Province))
+                    {
+                        var provinces = (existing.Province ?? string.Empty)
+                            .Split(',', System.StringSplitOptions.RemoveEmptyEntries)
+                            .Select(p => p.Trim())
+                            .ToList();
 
-    if (!provinces.Contains(model.Province.Trim(), System.StringComparer.OrdinalIgnoreCase))
-    {
-        provinces.Add(model.Province.Trim());
-        existing.Province = string.Join(", ", provinces);
-    }
-    else if (string.IsNullOrWhiteSpace(existing.Province))
-    {
-        // If existing was empty, just set it
-        existing.Province = model.Province.Trim();
-    }
-}
+                        var incoming = model.Province.Trim();
+                        if (!provinces.Contains(incoming, System.StringComparer.OrdinalIgnoreCase))
+                        {
+                            provinces.Add(incoming);
+                            existing.Province = string.Join(", ", provinces);
+                        }
+                        else if (string.IsNullOrWhiteSpace(existing.Province))
+                        {
+                            // If existing was empty, just set it
+                            existing.Province = incoming;
+                        }
+                    }
+                }
 
-if (model.OntarioLien)    existing.OntarioLien = true;
-if (model.AutoCheck)      existing.AutoCheck = true;
-if (model.OntarioHistory) existing.OntarioHistory = true;
-if (model.Oop)            existing.Oop = true;
+                // Back-compat: support legacy SearchType posts if present
+                if (!string.IsNullOrWhiteSpace(model.SearchType))
+                {
+                    switch (model.SearchType)
+                    {
+                        case "Lien":            existing.OntarioLien = true;      break;
+                        case "AutoCheck":       existing.AutoCheck = true;        break;
+                        case "OntarioHistory":  existing.OntarioHistory = true;   break;
+                        case "Oop":             existing.Oop = true;              break;
+                        case "Carfax":          existing.Carfax = true;           break;
+                        case "ExportCheck":     existing.ExportCheck = true;      break;
+                    }
+                }
 
-// Keep master’s flags too
-if (model.Carfax)         existing.Carfax = true;
-if (model.ExportCheck)    existing.ExportCheck = true;
+                // Checkbox-based flags (current behavior)
+                if (model.OntarioLien)    existing.OntarioLien = true;
+                if (model.AutoCheck)      existing.AutoCheck = true;
+                if (model.OntarioHistory) existing.OntarioHistory = true;
+                if (model.Oop)            existing.Oop = true;
+                if (model.Carfax)         existing.Carfax = true;
+                if (model.ExportCheck)    existing.ExportCheck = true;
+            }
 
-
+            // Reset textarea for convenience; keep Province to speed batching
             model.VinBatch = string.Empty;
+            // If you prefer to clear Province too, uncomment:
+            // model.Province = string.Empty;
+
             model.Items = _batchItems;
             return View(model);
+        }
+
+        [HttpPost("/search/batch/clear")]
+        public IActionResult ClearBatch()
+        {
+            _batchItems.Clear();
+            return RedirectToAction(nameof(Batch));
         }
     }
 }
