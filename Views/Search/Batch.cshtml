@@ -1,0 +1,81 @@
+@model BatchSearchViewModel
+@{
+    ViewData["Title"] = "Batch Search";
+}
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Batch" method="post">
+            <div class="mb-3">
+                <label asp-for="SearchType" class="form-label">Search Type</label>
+                <select asp-for="SearchType" class="form-select" asp-items="Model.SearchTypes" id="searchType"></select>
+            </div>
+            <div class="mb-3" id="provinceContainer">
+                <label asp-for="Province" class="form-label">Province</label>
+                <select asp-for="Province" class="form-select" asp-items="Model.Provinces"></select>
+            </div>
+            <div class="mb-3">
+                <label asp-for="VinBatch" class="form-label">VINs (one per line, up to 100)</label>
+                <textarea asp-for="VinBatch" class="form-control" rows="15"></textarea>
+            </div>
+            <button class="btn btn-primary">Submit</button>
+            <button type="reset" class="btn btn-secondary ms-2">Clear</button>
+        </form>
+    </div>
+    <div class="col-md-6">
+        <div class="d-flex justify-content-end mb-2">
+            <form asp-action="ClearBatch" method="post">
+                <button class="btn btn-secondary">Clear</button>
+            </form>
+        </div>
+        <div class="border p-3" style="min-height:400px;">
+            @if (Model.Items.Count > 0)
+            {
+                <table class="table table-sm">
+                    <thead class="table-light">
+                        <tr>
+                            <th>VIN</th>
+                            <th>Province</th>
+                            <th>Ontario Lien</th>
+                            <th>Auto Check</th>
+                            <th>Ontario History</th>
+                            <th>OOP</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Items)
+                        {
+                            <tr>
+                                <td>@item.Vin</td>
+                                <td>@item.Province</td>
+                                <td>@(item.OntarioLien ? "✔" : "")</td>
+                                <td>@(item.AutoCheck ? "✔" : "")</td>
+                                <td>@(item.OntarioHistory ? "✔" : "")</td>
+                                <td>@(item.Oop ? "✔" : "")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p>No VINs submitted yet.</p>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    const searchType = document.getElementById('searchType');
+    const provinceContainer = document.getElementById('provinceContainer');
+    function toggleProvince() {
+        if (searchType.value === 'Lien') {
+            provinceContainer.style.display = 'block';
+        } else {
+            provinceContainer.style.display = 'none';
+        }
+    }
+    searchType.addEventListener('change', toggleProvince);
+    toggleProvince();
+</script>
+}

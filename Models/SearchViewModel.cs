@@ -6,6 +6,7 @@ namespace UCDASearches.WebMVC.Models
     public class SearchItem
     {
         public string Vin { get; set; } = "";
+        public string Province { get; set; } = "";
         public bool OntarioLien { get; set; }
         public bool AutoCheck { get; set; }
         public bool OntarioHistory { get; set; }
