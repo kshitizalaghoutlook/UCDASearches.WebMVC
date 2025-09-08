@@ -6,7 +6,7 @@ namespace UCDASearches.WebMVC.Services
     {
         private readonly ConcurrentDictionary<string, string> _users = new()
         {
-            ["test@test.com"] = "123456"
+            ["test@test.com"] = "S3cure!Ucda#29Xf"
         };
 
         public Task<bool> ValidateCredentialsAsync(string email, string password)
