@@ -1,0 +1,85 @@
+@model BatchSearchViewModel
+@{
+    ViewData["Title"] = "Batch Search";
+}
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Batch" method="post">
+            <div class="mb-3">
+                <label asp-for="Province" class="form-label">Province</label>
+                <select asp-for="Province" class="form-select" asp-items="Model.Provinces"></select>
+            </div>
+            <div class="mb-3">
+                <label asp-for="VinBatch" class="form-label">VINs (one per line, up to 100)</label>
+                <textarea asp-for="VinBatch" class="form-control" rows="15"></textarea>
+            </div>
+            <div class="mb-3">
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="OntarioLien" />
+                    <label class="form-check-label" asp-for="OntarioLien">Ontario Lien</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="AutoCheck" />
+                    <label class="form-check-label" asp-for="AutoCheck">Auto Check</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="OntarioHistory" />
+                    <label class="form-check-label" asp-for="OntarioHistory">Ontario History</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="Oop" />
+                    <label class="form-check-label" asp-for="Oop">OOP</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="Carfax" />
+                    <label class="form-check-label" asp-for="Carfax">Carfax</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" asp-for="ExportCheck" />
+                    <label class="form-check-label" asp-for="ExportCheck">Export Check</label>
+                </div>
+            </div>
+            <button class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+    <div class="col-md-6">
+        <div class="border p-3" style="min-height:400px;">
+            @if (Model.Items.Count > 0)
+            {
+                <table class="table table-sm">
+                    <thead class="table-light">
+                        <tr>
+                            <th>VIN</th>
+                            <th>Province</th>
+                            <th>Ontario Lien</th>
+                            <th>Auto Check</th>
+                            <th>Ontario History</th>
+                            <th>OOP</th>
+                            <th>Carfax</th>
+                            <th>Export Check</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Items)
+                        {
+                            <tr>
+                                <td>@item.Vin</td>
+                                <td>@item.Province</td>
+                                <td>@(item.OntarioLien ? "✔" : "")</td>
+                                <td>@(item.AutoCheck ? "✔" : "")</td>
+                                <td>@(item.OntarioHistory ? "✔" : "")</td>
+                                <td>@(item.Oop ? "✔" : "")</td>
+                                <td>@(item.Carfax ? "✔" : "")</td>
+                                <td>@(item.ExportCheck ? "✔" : "")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p>No VINs submitted yet.</p>
+            }
+        </div>
+    </div>
+</div>
