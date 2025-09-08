@@ -50,16 +50,35 @@ namespace UCDASearches.WebMVC.Controllers
                 }
                 else
                 {
-                    existing.Province = model.Province;
-                }
+// Province: append unique province values (CSV), but be null/empty safe
+if (!string.IsNullOrWhiteSpace(model.Province))
+{
+    var provinces = (existing.Province ?? string.Empty)
+        .Split(',', System.StringSplitOptions.RemoveEmptyEntries)
+        .Select(p => p.Trim())
+        .ToList();
 
-                if (model.OntarioLien) existing.OntarioLien = true;
-                if (model.AutoCheck) existing.AutoCheck = true;
-                if (model.OntarioHistory) existing.OntarioHistory = true;
-                if (model.Oop) existing.Oop = true;
-                if (model.Carfax) existing.Carfax = true;
-                if (model.ExportCheck) existing.ExportCheck = true;
-            }
+    if (!provinces.Contains(model.Province.Trim(), System.StringComparer.OrdinalIgnoreCase))
+    {
+        provinces.Add(model.Province.Trim());
+        existing.Province = string.Join(", ", provinces);
+    }
+    else if (string.IsNullOrWhiteSpace(existing.Province))
+    {
+        // If existing was empty, just set it
+        existing.Province = model.Province.Trim();
+    }
+}
+
+if (model.OntarioLien)    existing.OntarioLien = true;
+if (model.AutoCheck)      existing.AutoCheck = true;
+if (model.OntarioHistory) existing.OntarioHistory = true;
+if (model.Oop)            existing.Oop = true;
+
+// Keep master’s flags too
+if (model.Carfax)         existing.Carfax = true;
+if (model.ExportCheck)    existing.ExportCheck = true;
+
 
             model.VinBatch = string.Empty;
             model.Items = _batchItems;

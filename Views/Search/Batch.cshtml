@@ -30,14 +30,15 @@
                     <input class="form-check-input" asp-for="Oop" />
                     <label class="form-check-label" asp-for="Oop">OOP</label>
                 </div>
-                <div class="form-check">
-                    <input class="form-check-input" asp-for="Carfax" />
-                    <label class="form-check-label" asp-for="Carfax">Carfax</label>
-                </div>
-                <div class="form-check">
-                    <input class="form-check-input" asp-for="ExportCheck" />
-                    <label class="form-check-label" asp-for="ExportCheck">Export Check</label>
-                </div>
+<div class="form-check">
+    <input class="form-check-input" asp-for="Carfax" />
+    <label class="form-check-label" asp-for="Carfax">Carfax</label>
+</div>
+<div class="form-check">
+    <input class="form-check-input" asp-for="ExportCheck" />
+    <label class="form-check-label" asp-for="ExportCheck">Export Check</label>
+</div>
+
             </div>
             <button class="btn btn-primary">Submit</button>
         </form>
@@ -55,8 +56,7 @@
                             <th>Auto Check</th>
                             <th>Ontario History</th>
                             <th>OOP</th>
-                            <th>Carfax</th>
-                            <th>Export Check</th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -69,8 +69,7 @@
                                 <td>@(item.AutoCheck ? "✔" : "")</td>
                                 <td>@(item.OntarioHistory ? "✔" : "")</td>
                                 <td>@(item.Oop ? "✔" : "")</td>
-                                <td>@(item.Carfax ? "✔" : "")</td>
-                                <td>@(item.ExportCheck ? "✔" : "")</td>
+
                             </tr>
                         }
                     </tbody>
