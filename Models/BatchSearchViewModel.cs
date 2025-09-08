@@ -28,9 +28,6 @@ namespace UCDASearches.WebMVC.Models
             new("AutoCheck", "AutoCheck"),
             new("Lien", "Lien"),
             new("Ontario History", "OntarioHistory"),
-            new("OOP", "Oop"),
-            new("Carfax", "Carfax"),
-            new("Export Check", "ExportCheck"),
         };
 
         // Province list uses 2-letter codes as values
